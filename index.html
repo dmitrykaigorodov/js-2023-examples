@@ -1,0 +1,25 @@
+
+<script>
+function onSubmit(e) {
+  const userNameInput = document.getElementById('userName')
+  const userName = userNameInput.value
+  console.log('onSubmit', userName)
+  e.preventDefault()
+  document.getElementById('profileForm').style.display = 'none'
+  document.getElementById('thankYou').style.display = 'block'
+}
+</script>
+<body>
+  <div>
+    <form id='profileForm' onsubmit="onSubmit(event)">
+      <label>Please, provide your name<br/>
+      <input id="userName">
+      </label>
+      <br/>
+      <button type="submit">Submit form</button>
+    </form>
+  </div>
+  <div id="thankYou" style="display: none;">
+    ✓ Thank you for submitting the form
+  </div>
+</body>
