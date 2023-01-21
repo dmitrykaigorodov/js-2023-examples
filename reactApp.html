@@ -1,0 +1,112 @@
+<html>
+<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+  const users = [
+    {
+      name: 'Pawel',
+      age: 42,           
+    },
+    {
+      name: 'Dmitry',
+      age: 42,
+    },
+    {
+      name: 'Roma',
+      age: 42,
+    },
+    {
+      name: 'Alesia',
+      age: 18,
+    },
+  ]
+
+  const validateUserList = (userList) => {
+    return userList.length
+    // if (!(userList.length > 0)) {
+    //   return 0
+    // }
+    // return true
+  }
+
+  const assertUserList = (userList) => {
+    if (userList.length === 0) {
+      throw new Error('Error asserting userList: userList.length === 0')
+    }
+  }
+
+
+  const UserListItem = ({user, happyBirthdayDearUser}) => 
+    <div>
+      <h2>{user.name}</h2>
+      <p>
+        {user.age} 
+        <button onClick={e => happyBirthdayDearUser({name: 'Roma'})}>+</button>
+      </p>
+    </div>
+
+  // params, props aka parameters, properties
+  const UserList = ({initialUserList=[]}) => {
+    
+    const [userList, setUserList] = React.useState(initialUserList)
+    const isValidUserList = validateUserList(userList)
+
+    const happyBirthday = (birthdayPerson) => {
+      const newUserList = userList.map(aUser => {
+        if(aUser.name === birthdayPerson.name) {
+          return {
+            name: aUser.name,
+            age: aUser.age + 1
+          }
+        } else {
+          return aUser
+        }
+      })
+      setUserList(newUserList)
+    }
+
+    const happyBirthdayToYou = (you) => {
+      return () => happyBirthday(you)
+    }
+
+    return <div>
+      { isValidUserList &&
+        <div>
+          <h1>User list</h1>
+          <div>
+            { 
+              userList.map(user => { 
+                const happyBirthdayDearUser = happyBirthdayToYou(user)
+                return <UserListItem user={user} 
+                  happyBirthdayDearUser={happyBirthdayDearUser}/>
+              })
+            }
+          </div>
+        </div>
+      }
+
+
+      { 
+        !isValidUserList && 'User list is empty'
+      } 
+    </div>
+  }
+
+  const App = () => {
+    return <UserList 
+      initialUserList={users} 
+    />
+  }
+
+  ReactDOM.render(
+    <App />, 
+    document.getElementById('root')
+  );
+
+</script>
+<body>
+  <div id="root"></div>
+</body>
+
+</html>
