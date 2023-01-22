@@ -1,0 +1,85 @@
+<html>
+<script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script type="text/babel">
+  const users = [
+    {
+      name: 'Igor',
+      age: 29
+    },
+    {
+      name: 'Tanya',
+      age: 18
+    },
+    {
+      name: 'Alex',
+      age: 29
+    },
+    {
+      name: 'Roma',
+      age: 24
+    }
+  ]
+
+  const UserListItem = ({user, happyBirthday}) => {
+    return <div>
+      <h2>{user.name}</h2>
+      <p>{user.age}
+        {' '}
+        <button onClick={(event) => happyBirthday(user) }>Happy birthday!</button>
+      </p>
+    </div>
+  }
+
+  //params is short for parameters
+  //props is short for properties
+  const UserList = ({initialUserList = []}) => {
+    const [userList, setUserList] = React.useState(initialUserList)
+    // let userList = initialUserList
+    // const setUserList = (newUserList) => {
+    //   userList = newUserList
+    //   console.log('newUserList', {newUserList})
+    // }
+
+    const happyBirthday = (birthdayPerson) => {
+      const newUserList = userList.map(user => {
+        const age = user.name === birthdayPerson.name? user.age+1: user.age
+        return {
+          ...user,
+          age
+        }
+      })
+      setUserList(newUserList)
+    }
+
+    const isUserListValid = userList && userList.length > 0
+
+    return <div>
+      {
+        isUserListValid ?
+        userList.map(user => <UserListItem user={user} happyBirthday={happyBirthday}/>) 
+        :<p>No users.</p>
+      }
+    </div>
+  }
+
+  const App = () => {
+    return <div>
+      <h1>List of users</h1>
+      <UserList
+        initialUserList={users}
+      />
+    </div>
+  }
+
+  ReactDOM.render(
+    <App />, 
+    document.getElementById('root')
+  );
+</script>
+<body>
+  <div id="root"></div>
+</body>
+
+</html>
