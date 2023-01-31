@@ -1,0 +1,45 @@
+<html>
+  <meta charset="UTF-8">
+  <script src="https://unpkg.com/react@18.2/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">      
+      const cats = [
+        {
+          nick: 'Stepan',
+          age: 2
+        },
+        {
+          nick: 'Pushok',
+          age: 3
+        },
+        {
+          nick: 'Barsik',
+          age: 7
+        },
+        {
+          nick: 'Snezhok',
+          age: 1
+        },
+      ]
+
+      const CatView = ({cat}) => {
+        return <li>{cat.nick} <small style={{color: 'red'}}>{cat.age}</small></li>
+      }
+      
+      const App = () => {
+        const retVal = cats.map(cat => <CatView key={cat.nick} cat={cat} />)
+        console.log(retVal)
+        return retVal
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
+
+
+
