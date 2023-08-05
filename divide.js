@@ -33,6 +33,15 @@ String.prototype.minus = function (val2) {
   return result;
 };
 
+/**
+ * Example:
+ * when calculating  
+ * 132/11 = 12
+ * this function returns '1' of '12'
+ * @param {*} val1 
+ * @param {*} divisor 
+ * @returns 
+ */
 function firstIncompleteDividend(val1, divisor) {
   let quotient = 0;
   let substring = "";
@@ -50,6 +59,15 @@ function firstIncompleteDividend(val1, divisor) {
   return { reminderStr, result, i };
 }
 
+/**
+ * 132/11 = 12
+ * 
+ * @param {*} reminderStr 
+ * @param {*} val1 
+ * @param {*} divisor 
+ * @param {*} i 
+ * @returns 
+ */
 function nextIncompleteDividend(reminderStr, val1, divisor, i) {
   let quotient = 0;
   let substring = reminderStr;
@@ -73,6 +91,11 @@ function nextIncompleteDividend(reminderStr, val1, divisor, i) {
   return { reminderStrNew, result, i, a };
 }
 
+/**
+ * "121".divide("11") === "11"
+ * @param {*} val2 
+ * @returns string representation of this string divide by val2, integer
+ */
 String.prototype.divide = function (val2) {
   const val1 = this;
 
@@ -85,11 +108,10 @@ String.prototype.divide = function (val2) {
   const firstIncompleteDividendVal = firstIncompleteDividend(val1, divisor);
 
   let reminderStr = firstIncompleteDividendVal.reminderStr;
-  let i = firstIncompleteDividendVal.i;
   let result = firstIncompleteDividendVal.result;
 
   for (let j = i; j <= val1.length; j += a) {
-    const nextIncompleteDividendVal = nextIncompleteDividend(
+    const {a, reminderStr, result, i } = nextIncompleteDividend(
       reminderStr,
       val1,
       divisor,
@@ -106,73 +128,6 @@ String.prototype.divide = function (val2) {
   }
   return result;
 };
-
-// const testPlus = (val1, val2, expected) => {
-//   const actual = val1.plus(val2);
-//   actual === expected
-//     ? console.log("pass", { val1, val2, expected, actual })
-//     : console.log("fail", { val1, val2, expected, actual });
-// };
-// testPlus("1", "999", "1000");
-
-// const testMinus = (val1, val2, expected) => {
-//   const actual = val1.minus(val2);
-//   actual === expected
-//     ? console.log("pass", { val1, val2, expected, actual })
-//     : console.log("fail", { val1, val2, expected, actual });
-// };
-// testMinus("9", "1", "8");
-// testMinus("1", "9", "-8");
-// testMinus("1111", "9", "1102");
-// testMinus("9", "1111", "-1102");
-
-// const testMultDigit = (str, digit, expected) => {
-//   const actual = multStringToDigit(str, digit);
-//   actual === expected
-//     ? console.log("pass", { str, digit, expected, actual })
-//     : console.log("fail", { str, digit, expected, actual });
-// };
-// testMultDigit("123", 2, "246");
-// testMultDigit("12", 7, "84");
-// testMultDigit("99", 2, "198");
-
-// const testMultiply = (val1, val2, expected) => {
-//   const actual = val1.multiply(val2);
-//   actual === expected
-//     ? console.log("pass", { val1, val2, expected, actual })
-//     : console.log("fail", { val1, val2, expected, actual });
-// };
-// testMultiply("123", "3", "369");
-// testMultiply("11", "11", "121");
-
-// const testDivide = (val1, val2) => {
-//   const actual = val1.divide(val2);
-
-//   return actual;
-// };
-// testDivide("123", "3");
-// testDivide("3", "123");
-
-/**
- * if String.lessThen(str2)  => 0
- * else
- *  try guess base on string size difference
- *  10xN vs 7xN => 1000 or 100 => result += 100 + (10xN).divide(100*7xN)
- */
-
-// const testFirstIncompleteDividend = (val1, val2) => {
-//   const actual = firstIncompleteDividend(val1, val2);
-//   console.log({ val1, val2, actual });
-// };
-
-// testFirstIncompleteDividend("12574", "21");
-
-// const testNextTrueDigit = (val1, digit2) => {
-//   const actual = nextTrueDigit(3, val1, digit2, 3, 2, 1);
-//   console.log({ val1, digit2, actual });
-// };
-
-// testNextTrueDigit("25748", "42");
 
 const testDivide = (val1, val2, expected) => {
   const actual = val1.divide(val2);
