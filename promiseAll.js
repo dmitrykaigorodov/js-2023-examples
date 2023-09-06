@@ -1,25 +1,29 @@
 const promiseAll = (promises) => {
   return new Promise((resolve, reject) => {
-    const total = [];
+    const results = new Array(promises.length);
     let settledPromises = 0;
 
     if (promises.length === 0) {
-      resolve(total);
+      resolve(results);
       return;
     }
 
     for (let i = 0; i < promises.length; i++) {
-      promises[i]
-        .then((result) => {
-          total[i] = result;
+      const promise = promises[i]
+      if (!(promise instanceof Promise)) {
+        settledPromises++;
+        results[i] = promise;
+      }
+      promise.then((result) => {
+          results[i] = result;
           settledPromises++;
 
           if (settledPromises === promises.length) {
-            resolve(total);
+            resolve(results);
           }
         })
-        .catch(() => {
-          reject(new Error("Disaster"));
+        .catch((e) => {
+          reject(new Error(e));
         });
     }
   });
@@ -54,4 +58,69 @@ promiseAll(promises1)
     console.error("At least one promise rejected:", error);
   });
 
-  
+const sample1 = async () => {
+  a()
+  await b() // syntax sugar for .then()
+  c()
+}
+
+const sample2 = () => {
+  // sample1() === sample2()
+  a()
+  b().then(() => { 
+    c()
+  })
+}
+
+const makeRequest1 = ({promise1, promise2, promise3}) => {
+  return promise1()
+    .then(value1 => {
+      // do something
+      return Promise.all([value1, promise2(value1)])
+    })
+    .then(([value1, value2]) => {
+      // do something          
+      return promise3(value1, value2)
+    })
+}
+
+const makeRequest2 = async ({promise1, promise2, promise3}) => {
+  const value1 = await promise1()
+  const value2 = await promise2(value1)
+  return promise3(value1, value2) // 
+}
+
+const test = async () => {
+  const ps = {
+    promise1: async () => 3, promise2: async (a) => a + 10, promise3: async (a, b) => {
+      throw new Error('error')
+    }}
+  // const r1 = await makeRequest1(ps)
+  const r2 = await makeRequest2(ps)
+  console.log({ r1, r2 })
+}
+// test()
+
+
+const top = async () => {
+  await intermediate()
+}
+
+const intermediate = async () => {
+  try {
+    return await l2()
+  }
+  catch (e) {
+    console.log('Error in intermediate')
+    console.error(e)
+  }
+}
+
+const l2 = async () => {
+  return await l3()
+}
+
+const l3 = async () => {
+  throw new Error('error')
+}
+top()
